@@ -46,6 +46,8 @@ To (re-)generate Swagger docs, run `swag init`.
 
 ## CLI
 
+`cd cli`
+
 The CLI is a tiny Python script. To try to show a little structure, functions have been moved to a lib-file. To run locally you need `python3` as well as python requests library (`pip3 install requests`). The API URL is consumed as an ENV variable.
 
 Example of running the CLI locally:
