@@ -8,6 +8,7 @@ There is a lot of known issues, like:
 * _very_ minimal logging.
 * No persistant database.
 * No auth whatsoever anywhere.
+* No integration tests on the CLI UI.
 
 **Quick start:**
 
