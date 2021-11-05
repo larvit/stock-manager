@@ -1,0 +1,131 @@
+basePath: /
+definitions:
+  db.StockItem:
+    properties:
+      balance:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  handlers.ResJSONError:
+    properties:
+      error:
+        type: string
+      field:
+        type: string
+    type: object
+  handlers.StockItemAdjuster:
+    properties:
+      amount:
+        type: integer
+      id:
+        type: string
+    type: object
+info:
+  contact:
+    email: lilleman@larvit.se
+    name: Larv IT Stock Manager
+    url: https://github.com/larvit/stock-manager
+  license:
+    name: MIT
+  title: Stock Manager REST API
+  version: "0.1"
+paths:
+  /add-stock-items:
+    post:
+      consumes:
+      - application/json
+      operationId: add-balances
+      parameters:
+      - description: Array of stock items to add balances to
+        in: body
+        name: body
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/db.StockItem'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            items:
+              $ref: '#/definitions/handlers.ResJSONError'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            items:
+              $ref: '#/definitions/handlers.ResJSONError'
+            type: array
+      summary: Add stock balances
+  /stock-balances:
+    get:
+      consumes:
+      - application/json
+      description: Gets a list of all stock and their balances
+      operationId: get-stock-balances
+      parameters:
+      - description: Array of ids
+        in: query
+        name: ids[]
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/db.StockItem'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            items:
+              $ref: '#/definitions/handlers.ResJSONError'
+            type: array
+      summary: Get stock balances
+  /subtract-stock-items:
+    post:
+      consumes:
+      - application/json
+      operationId: subtract-balances
+      parameters:
+      - description: Array of stock items to subtract balance in
+        in: body
+        name: body
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/handlers.StockItemAdjuster'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            items:
+              $ref: '#/definitions/handlers.ResJSONError'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            items:
+              $ref: '#/definitions/handlers.ResJSONError'
+            type: array
+      summary: Subtract stock balances
+swagger: "2.0"

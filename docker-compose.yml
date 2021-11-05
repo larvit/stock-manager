@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  api:
+    build: api
+    environment:
+      - WEB_BIND_HOST=:4000
+    ports:
+      - 4000:4000
+
+  api-tests:
+    build: api-tests
+    environment:
+      - API_URL=http://api:4000
+    profiles: ["tests"]
+    depends_on:
+      - api
+    volumes:
+      - ./api-tests/reports:/home/worker/reports
+    command: robot --outputdir ./reports ./test-cases/All.robot
+
+  cli:
+    build: cli
+    environment:
+      - API_URL=http://api:4000
+    depends_on:
+      - api
+    profiles: ["cli"]

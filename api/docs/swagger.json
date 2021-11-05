@@ -1,0 +1,201 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Stock Manager REST API",
+        "contact": {
+            "name": "Larv IT Stock Manager",
+            "url": "https://github.com/larvit/stock-manager",
+            "email": "lilleman@larvit.se"
+        },
+        "license": {
+            "name": "MIT"
+        },
+        "version": "0.1"
+    },
+    "basePath": "/",
+    "paths": {
+        "/add-stock-items": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Add stock balances",
+                "operationId": "add-balances",
+                "parameters": [
+                    {
+                        "description": "Array of stock items to add balances to",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/db.StockItem"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.ResJSONError"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.ResJSONError"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/stock-balances": {
+            "get": {
+                "description": "Gets a list of all stock and their balances",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get stock balances",
+                "operationId": "get-stock-balances",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Array of ids",
+                        "name": "ids[]",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/db.StockItem"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.ResJSONError"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/subtract-stock-items": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Subtract stock balances",
+                "operationId": "subtract-balances",
+                "parameters": [
+                    {
+                        "description": "Array of stock items to subtract balance in",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.StockItemAdjuster"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.ResJSONError"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.ResJSONError"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "db.StockItem": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.ResJSONError": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "field": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.StockItemAdjuster": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
